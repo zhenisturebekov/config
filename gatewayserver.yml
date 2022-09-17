@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: gatewayserver
+  cloud:
+    gateway:
+      routes:
+        - id: eurekaclient
+          uri: lb://eurekaclient
+          predicates:
+            - Path=/eurekaclient/**
+        - id: feignclient
+          uri: lb://feignclient
+          predicates:
+            - Path=/feignclient/**
+      discovery:
+        locator:
+          lower-case-service-id: true
+          enabled: true
+
+server:
+  port: 8081
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://eurekaserver:8761/eureka/
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
